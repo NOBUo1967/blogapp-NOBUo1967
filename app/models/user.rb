@@ -25,6 +25,17 @@ class User < ApplicationRecord
   has_many :articles, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :favorite_articles, through: :likes, source: :article
+
+  has_many :following_relationships, foreign_key: 'follower_id', class_name: 'Relationship', dependent: :destroy
+  #:following_relationships = 自分がfollowerになっているものをもってくれば誰をfollowしているかわかる。
+  #foreign_key: 'follower_id' = 外部キー。railsはhas_manyすれば勝手に察してくれるが今回はuser_idではないため指定。
+  #class_name: 'Relationship'  = :following_relationshipsというtableやmodelは存在しないため、なんのmodelのことか教える。
+  has_many :followings, through: :following_relationships, source: :following
+  #followしているuserを取ってくるにはRelationship_tableをまたいで取ってこないといけない。
+  #followings = folowしているuserのことをfollowingsとしている。
+  #through: :following_relationships
+  #source: :following = followしている相手をfollowingとしている。following_idを取得。
+
   has_one :profile, dependent: :destroy
 
   delegate :birthday, :age, :gender, to: :profile, allow_nil: true
@@ -39,6 +50,10 @@ class User < ApplicationRecord
 
   def display_name
     profile&.nickname || self.email.split('@').first
+  end
+
+  def follow!(user)
+    following_relationships.create!(following_id: user.id)
   end
 
   def prepare_profile
