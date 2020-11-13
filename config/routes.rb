@@ -9,6 +9,9 @@ Rails.application.routes.draw do
     resource :like, only: [:create, :destroy]
   end
 
+  resources :accounts, only: [:show]
+  #アカウントの詳細pageを開いてfollow_buttonを出現させるため
+
   resource :profile, only: [:show, :edit, :update]
   resources :favorites, only: [:index]
 end
