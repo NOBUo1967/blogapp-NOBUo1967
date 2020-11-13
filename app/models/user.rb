@@ -36,6 +36,10 @@ class User < ApplicationRecord
   #through: :following_relationships
   #source: :following = followしている相手をfollowingとしている。following_idを取得。
 
+  has_many :follower_relationships, foreign_key: 'following_id', class_name: 'Relationship', dependent: :destroy
+  #followされている側から見ると外部キーはfollowing_idになる。
+  has_many :followers, through: :follower_relationships, source: :follower
+
   has_one :profile, dependent: :destroy
 
   delegate :birthday, :age, :gender, to: :profile, allow_nil: true
