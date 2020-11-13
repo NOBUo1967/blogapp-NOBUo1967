@@ -57,7 +57,17 @@ class User < ApplicationRecord
   end
 
   def follow!(user)
+    #followの!は例外が発生するメソッドであることを明示的にしている。
     following_relationships.create!(following_id: user.id)
+  end
+
+  def unfollow!(user)
+    relation = following_relationships.find_by!(following_id: user.id)
+    #find_byに!をつけることで値が存在しなければ例外が発生して処理が止まる。
+    #followを外すときに自分がfollowしていないuserからfollowを外すことはありえない。
+    #following_relationshipsに対象userが存在していないとおかしい。
+    relation.destroy!
+    #削除されるのが当然なので!をつける
   end
 
   def prepare_profile
