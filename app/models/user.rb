@@ -58,11 +58,21 @@ class User < ApplicationRecord
 
   def follow!(user)
     #followの!は例外が発生するメソッドであることを明示的にしている。
-    following_relationships.create!(following_id: user.id)
+    user_id = get_user_id(user)
+    #user_classのインスタンスが渡ってきたらuserのidを取得して代入する。
+    #userのidがそのまま渡ってきたらそのまま代入する。
+    following_relationships.create!(following_id: user_id)
+  end
+
+  def has_followed?(user)
+    following_relationships.exists?(following_id: user.id)
+    #current_user.has_followed?(User.second)のように使う
+    #current_userのfollowing_relationshipsの中にfollowing_idが引数のuserが存在するかを確認する
   end
 
   def unfollow!(user)
-    relation = following_relationships.find_by!(following_id: user.id)
+    user_id = get_user_id(user)
+    relation = following_relationships.find_by!(following_id: user_id)
     #find_byに!をつけることで値が存在しなければ例外が発生して処理が止まる。
     #followを外すときに自分がfollowしていないuserからfollowを外すことはありえない。
     #following_relationshipsに対象userが存在していないとおかしい。
@@ -79,6 +89,17 @@ class User < ApplicationRecord
       profile.avatar
     else
       'default-avatar.png'
+    end
+  end
+
+  private
+  def get_user_id(user)
+    #follow_methodとunfollowの中でしか使わない。
+    #private以下のmethodはUserのインスタンスでは呼び出せない
+    if user.is_a?(User) #is_a? =引数のクラスのインスタンスであるかどうかをチェックしてくれる
+      user.id
+    else
+      user
     end
   end
 end
