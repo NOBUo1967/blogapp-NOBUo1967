@@ -17,4 +17,24 @@ require("channels")
 // const imagePath = (name) => images(name, true)
 
 require("trix")
+//ActionTextで作ったエディターのこと。このライブラリを読み込んでエディターに使った。
 require("@rails/actiontext")
+
+import $ from 'jquery'
+import axios from 'axios'
+
+document.addEventListener('DOMContentLoaded', () => {
+  //ページで起こる事象について監視できる。 ex)ページが表示された、ボタンがクリックされた等
+  //addEventListener = イベントが起こったら関数を実行する。
+  $('.article_title').on('click', () => {
+    //.article_titleにたいしてclickというイベントが起こったらなにかをする(onする)
+    axios.get('/')
+      //リクエストを指定し、()内にurlを指定する。
+      .then((response) => {
+        //リクエストを投げて、もしうまく行ったらresponseが渡ってきたfunctionを実行する。
+        console.log(response)
+        //responseの内容を確認する
+        //=> article_titleを押したらroot_pathにgetリクエストを投げて、うまく行ったらresponseをconsole.logに表示する。
+      })
+  })
+})
