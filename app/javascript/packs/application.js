@@ -23,7 +23,7 @@ require("@rails/actiontext")
 import $ from 'jquery'
 import axios from 'axios'
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('turbolinks:load', () => {
   //ページで起こる事象について監視できる。 ex)ページが表示された、ボタンがクリックされた等
   //addEventListener = イベントが起こったら関数を実行する。
   $('.article_title').on('click', () => {
