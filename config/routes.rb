@@ -8,7 +8,8 @@ Rails.application.routes.draw do
   resources :articles do
     resources :comments, only: [:new, :create]
 
-    resource :like, only: [:create, :destroy]
+    resource :like, only: [:show, :create, :destroy]
+    #getリクエストでいいねしているかどうかを判断するためshowが必要。
   end
 
   resources :accounts, only: [:show] do
