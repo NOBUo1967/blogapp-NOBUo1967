@@ -15,6 +15,23 @@ const handleHeartDisplay = (hasLiked) => {
 document.addEventListener('DOMContentLoaded', () => {
   const dataset = $('#article-show').data()
   const articleId = dataset.articleId
+
+  axios.get(`/articles/${articleId}/comments`)
+    .then((response) => {
+      const comments = response.data
+      //commentsをすべて取得する。
+      comments.forEach((comment) => {
+        //commentsからcommentを一つづつ取り出す = Rubyのeach_methodと一緒
+        //Rubyだとblockにはいるが、JSだとfunctionの中に入れられる
+        $('.comments-container').append(
+          `<div class="article_comment"><p>${comment.content}</p></div>`
+          //append = タグの中にhtmlのタグを挿入していく
+          //comment-containerの中に上記のhtmlを追加していく
+          //上記のhtmlはもともとarticle.show.htmlで記載していた内容。
+        )
+      })
+    })
+
   axios.get(`/articles/${articleId}/like`)
     .then((response) => {
       const hasLiked = response.data.hasLiked
