@@ -22,6 +22,12 @@ require("@rails/actiontext")
 
 import $ from 'jquery'
 import axios from 'axios'
+import { csrfToken } from 'rails-ujs'
+
+axios.defaults.headers.common['X-CSRF-Token'] = csrfToken()
+// 鍵みたいなものをもたせて、鍵を持っている者しかpostできないようにしている。
+// csrfTokenは鍵を発行している。
+// axios.defaults.headers.common = 鍵を常につけてリクエストをすると設定。
 
 const handleHeartDisplay = (hasLiked) => {
   if (hasLiked) {
@@ -39,4 +45,35 @@ document.addEventListener('turbolinks:load', () => {
       const hasLiked = response.data.hasLiked
       handleHeartDisplay(hasLiked)
     })
+
+  $('.inactive-heart').on('click', () => {
+    // on = 要素に対してイベントが起こることを監視する。
+    axios.post(`/articles/${articleId}/like`)
+      .then((response) => {
+        if (response.data.status == 'ok'){
+          $('.active-heart').removeClass('hidden')
+          $('.inactive-heart').addClass('hidden')
+        }
+      })
+      .catch((e) => {
+        //うまく行った時はthen、うまくいかなかったらcatch
+        window.alert('Error')
+        console.log(e)
+        //catchするとerrorがでる。(e)はエラーの意味。errorをconsole.logで表示する。
+      })
+  })
+
+  $('.active-heart').on('click', () => {
+    axios.delete(`/articles/${articleId}/like`)
+      .then((response) => {
+        if (response.data.status == 'ok'){
+          $('.active-heart').addClass('hidden')
+          $('.inactive-heart').removeClass('hidden')
+        }
+      })
+      .catch((e) => {
+        window.alert('Error')
+        console.log(e)
+      })
+  })
 })
