@@ -31,6 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
     $('.comment-text-area').removeClass('hidden')
   })
 
+  $('.add-comment-button').on('click', () => {
+    const content = $('#comment_content').val()
+    if (!content) {
+      window.alert('コメントを入力してください')
+        //contentが空の場合はalertが出る
+    } else {
+        //空じゃなければpostする
+      axios.post(`/articles/${articleId}/comments`, {
+        comment: {content: content}
+        //{comment: {content: 'aaaaaaa'}}と値がなっていないとNGのため値を指定
+      })
+      .then((res) => {
+        const comment = res.data
+        $('.comments-container').append(
+          `<div class="article_comment"><p>${comment.content}</p></div>`
+          // commentが保存されればcomment-containerに保存されたcommentを追加する。
+        )
+        const content = $('#comment_content').val('')
+          //投稿後もフォームに入力した内容が残ってしまっているので、contentのvalに空をいれる。
+      })
+    }
+  })
 
   axios.get(`/articles/${articleId}/like`)
     .then((response) => {
