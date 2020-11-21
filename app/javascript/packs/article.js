@@ -19,18 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
   axios.get(`/articles/${articleId}/comments`)
     .then((response) => {
       const comments = response.data
-      //commentsをすべて取得する。
       comments.forEach((comment) => {
-        //commentsからcommentを一つづつ取り出す = Rubyのeach_methodと一緒
-        //Rubyだとblockにはいるが、JSだとfunctionの中に入れられる
         $('.comments-container').append(
           `<div class="article_comment"><p>${comment.content}</p></div>`
-          //append = タグの中にhtmlのタグを挿入していく
-          //comment-containerの中に上記のhtmlを追加していく
-          //上記のhtmlはもともとarticle.show.htmlで記載していた内容。
         )
       })
     })
+
+  $('.show-comment-form').on('click', () => {
+    $('.show-comment-form').addClass('hidden')
+    $('.comment-text-area').removeClass('hidden')
+  })
+
 
   axios.get(`/articles/${articleId}/like`)
     .then((response) => {
