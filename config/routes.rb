@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   #timelineはuserにとって一つしかないためresourcesではなくresource
 
   resources :articles do
-    resources :comments, only: [:new, :create]
+    resources :comments, only: [:index, :new, :create]
 
     resource :like, only: [:show, :create, :destroy]
     #getリクエストでいいねしているかどうかを判断するためshowが必要。
