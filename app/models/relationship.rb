@@ -21,6 +21,12 @@
 class Relationship < ApplicationRecord
   belongs_to :follower, class_name: 'User'
   belongs_to :following, class_name: 'User'
-  #rerationship_tableはfollower,following両方に従属している関係。
-  #class_name: 'User' = class名がわからないので指定する。
+
+  after_create :send_email
+  #before_createなどもある。
+
+  private
+  def send_email
+    RelationshipMailer.new_follower(following, follower).deliver_now
+  end
 end
