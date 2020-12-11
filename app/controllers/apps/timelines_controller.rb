@@ -1,6 +1,4 @@
-class TimelinesController < ApplicationController
-  before_action :authenticate_user!
-
+class Apps::TimelinesController < Apps::ApplicationController
   def show
     user_ids = current_user.followings.pluck(:id)
     # pluck = followingsの取得できたrecodeのidをとれる
