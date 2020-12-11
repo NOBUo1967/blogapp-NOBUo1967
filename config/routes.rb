@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   devise_for :users
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   root to: 'articles#index'
-  resource :timeline, only: [:show]
-  #timelineはuserにとって一つしかないためresourcesではなくresource
 
   resources :articles
 
@@ -23,8 +21,11 @@ Rails.application.routes.draw do
     #unfollowを作ると考える。 => 思想的なはなし
   end
 
-  resource :profile, only: [:show, :edit, :update]
-  resources :favorites, only: [:index]
+  scope module: :apps do
+    resources :favorites, only: [:index]
+    resource :profile, only: [:show, :edit, :update]
+    resource :timeline, only: [:show]
+  end
 
   namespace :api, defaults: {format: :json} do
     scope '/articles/:article_id' do
