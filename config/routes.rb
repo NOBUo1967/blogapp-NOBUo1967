@@ -10,12 +10,7 @@ Rails.application.routes.draw do
   resource :timeline, only: [:show]
   #timelineはuserにとって一つしかないためresourcesではなくresource
 
-  resources :articles do
-    resources :comments, only: [:index, :new, :create]
-
-    resource :like, only: [:show, :create, :destroy]
-    #getリクエストでいいねしているかどうかを判断するためshowが必要。
-  end
+  resources :articles
 
   resources :accounts, only: [:show] do
   #アカウントの詳細pageを開いてfollow_buttonを出現させるため
@@ -30,4 +25,11 @@ Rails.application.routes.draw do
 
   resource :profile, only: [:show, :edit, :update]
   resources :favorites, only: [:index]
+
+  namespace :api, defaults: {format: :json} do
+    scope '/articles/:article_id' do
+      resources :comments, only: [:index, :create]
+      resource :like, only: [:show, :create, :destroy]
+    end
+  end
 end
