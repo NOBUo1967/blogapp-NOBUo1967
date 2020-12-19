@@ -64,5 +64,7 @@ RSpec.configure do |config|
 
   config.include FactoryBot::Syntax::Methods
   config.include Devise::Test::IntegrationHelpers, type: :request
-  # request specについてDeviseをインストールするという記載
+  # request specについてDeviseのsign_inというメソッドを使えるようにするするという記載
+  config.include Devise::Test::IntegrationHelpers, type: :system
+  # system specにおいてもDeviseを使えるようにする。
 end
