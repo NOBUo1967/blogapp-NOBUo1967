@@ -1,8 +1,14 @@
 FactoryBot.define do
-  factory :user do #userというfactoryを作成した
+  factory :user do 
     email { Faker::Internet.email }
     password { 'password' }
-    # user_modelにあるデータ
-    # user_modelの設定を読み込んで、そこにemailとpasswordを入力したダミーデータを作成している。
+
+    trait :with_profile do
+      after :build do |user|
+      # 上のインスタンスが作成された時にbuildされる。
+        build(:profile, user: user)
+        # userがbuildされるとprofileもbuildされる。
+      end
+    end
   end
 end
