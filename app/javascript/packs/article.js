@@ -23,10 +23,30 @@ const handleCommentForm = () => {
 const appendNewComment = (comment) => {
   $('.comments-container').append(
     // `<div class="article_comment"><p>${comment.content}</p></div>`
-    `<div class="article_comment"><p>${escape(comment.content)}</p></div>`
+    escapeHTML`<div class="article_comment"><p>${(comment.content)}</p></div>`
     // escape = 文字列に変換する。scriptではない状態に変更する。
     // veuなどではデフォルトで対策されている。
   )
+}
+
+function escapeSpecialChars(str) {
+  return str
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;")
+  .replace(/'/g, "&#039;");
+}
+
+function escapeHTML(strings, ...values) {
+  return strings.reduce((result, str, i) => {
+    const value = values[i - 1];
+    if (typeof value === "string") {
+      return result + escapeSpecialChars(value) + str;
+    } else {
+      return result + String(value) + str;
+    }
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
