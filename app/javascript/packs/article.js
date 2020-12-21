@@ -22,7 +22,10 @@ const handleCommentForm = () => {
 
 const appendNewComment = (comment) => {
   $('.comments-container').append(
-    `<div class="article_comment"><p>${comment.content}</p></div>`
+    // `<div class="article_comment"><p>${comment.content}</p></div>`
+    `<div class="article_comment"><p>${escape(comment.content)}</p></div>`
+    // escape = 文字列に変換する。scriptではない状態に変更する。
+    // veuなどではデフォルトで対策されている。
   )
 }
 
